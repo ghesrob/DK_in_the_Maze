@@ -4,7 +4,6 @@ from pygame.locals import *
 # Fichiers locaux
 from constantes import *
 from player import Player
-from level import Level
 from maze import Maze
 from cell import Cell
 

@@ -7,7 +7,9 @@ from constantes import *
 from cell import Cell
 
 class Maze:
-    
+    """ Classe permettant de générer aléatoirement un labyrinthe 
+    à l'aide de l'algorithme first depth search """
+
     def __init__(self, nx, ny, ix=0, iy=0):
         """Initialize the maze grid.
         The maze consists of nx x ny cells and will be constructed starting
