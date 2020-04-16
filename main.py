@@ -7,18 +7,19 @@ from player import Player
 from maze import Maze
 
 
-
 #Ouverture et configuration de la fenêtre Pygame 
 pygame.init()
-window = pygame.display.set_mode((window_size, window_size))
+screen = pygame.display.set_mode((screen_size_x, screen_size_y))
 icon = pygame.image.load(icon_sprite)
+ingame_background = pygame.image.load(background).convert()
+ingame_background = pygame.transform.scale(ingame_background, (screen_size_x, screen_size_y))
 pygame.display.set_icon(icon)
 pygame.display.set_caption(title)
 pygame.key.set_repeat(90, 50)
 
-# Boucle 
-in_app = 1
-while in_app:
+
+# Boucle infinie
+while True:
     in_lobby = 1
     in_game = 1
 
@@ -28,38 +29,29 @@ while in_app:
 
         # Mise en forme du lobby
         image_lobby = pygame.image.load(lobby).convert_alpha()
-        window.blit(image_lobby, (0,0))
+        image_lobby = pygame.transform.scale(image_lobby, (screen_size_x, screen_size_y))
+        screen.blit(image_lobby, (0,0))
         pygame.display.flip()
 
         
         for event in pygame.event.get():
+            
             # Fermeture de l'app
             if event.type == QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
                 pygame.quit()
                 quit()
 
-            # Choix du niveau    
-            elif event.type == KEYDOWN:
-                if event.key == K_F1:
+            # Lancement de la partie   
+            elif event.type == KEYDOWN and event.key != K_ESCAPE:
                     in_lobby = 0
-                    level_selected = level_1
-                elif event.key == K_F2:
-                    in_lobby = 0
-                    level_selected = level_2
 
 
     # Sortie de lobby - preparation du jeu 
-    if level_selected:
-        # Génération du niveau et du personnage
-        maze = Maze(cell_count, cell_count, 15, 15)
-        maze.create()
-        dk = Player(maze, dk_up, dk_down, dk_left, dk_right)
-
-        # Setup du jeu et affichage de l'écran
-        background_image = pygame.image.load(background).convert()
-        #window.blit(background_image, (0,0))
-        #stage.show(window)        
-
+    # Génération du niveau et du personnage
+    maze = Maze(cell_count_x, cell_count_y)
+    maze.create()
+    dk = Player(maze, dk_up, dk_down, dk_left, dk_right)
+     
 
     # En jeu
     while in_game:
@@ -88,11 +80,11 @@ while in_app:
                     dk.move("right")
 
         # Rafraichissement de l'affichage
-        window.blit(background_image, (0,0))
-        maze.show(window)
-        window.blit(dk.direction, (dk.coord_x, dk.coord_y))
+        screen.blit(ingame_background, (0,0))
+        maze.show(screen)
+        screen.blit(dk.direction, (dk.coord_x, dk.coord_y))
         pygame.display.flip()
 
         # Retour à l'écran d'accueil en cas de victoire
-        if maze.structure[dk.cell_y][dk.cell_x] == 'a':
+        if maze.structure[dk.cell_y, dk.cell_x] == 'a':
             in_game = 0
