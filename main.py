@@ -5,7 +5,7 @@ from pygame.locals import *
 from constantes import *
 from player import Player
 from maze import Maze
-from cell import Cell
+
 
 
 #Ouverture et configuration de la fenêtre Pygame 
@@ -14,7 +14,7 @@ window = pygame.display.set_mode((window_size, window_size))
 icon = pygame.image.load(icon_sprite)
 pygame.display.set_icon(icon)
 pygame.display.set_caption(title)
-pygame.key.set_repeat(90, 100)
+pygame.key.set_repeat(90, 50)
 
 # Boucle 
 in_app = 1
@@ -35,8 +35,8 @@ while in_app:
         for event in pygame.event.get():
             # Fermeture de l'app
             if event.type == QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
-                in_app, in_lobby, in_game = 0, 0, 0
-                level_selected = 0
+                pygame.quit()
+                quit()
 
             # Choix du niveau    
             elif event.type == KEYDOWN:
@@ -51,11 +51,8 @@ while in_app:
     # Sortie de lobby - preparation du jeu 
     if level_selected:
         # Génération du niveau et du personnage
-        #stage = Level(level_selected)
-        #stage.create()
-        maze = Maze(7, 7, 0, 0)
-        maze.make_maze()
-        maze.large_maze()
+        maze = Maze(cell_count, cell_count, 15, 15)
+        maze.create()
         dk = Player(maze, dk_up, dk_down, dk_left, dk_right)
 
         # Setup du jeu et affichage de l'écran
@@ -72,7 +69,8 @@ while in_app:
 
             # Fermeture de l'app 
             if event.type == QUIT:
-                in_app, in_game = 0, 0
+                pygame.quit()
+                quit()
 
             # Retour lobby avec la touche échap    
             elif event.type == KEYDOWN and event.key == K_ESCAPE:

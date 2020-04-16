@@ -10,8 +10,8 @@ class Player:
 
     def __init__(self, level, sprite_up, sprite_down, sprite_left, sprite_right):
         # Position du perso
-        self.cell_x, self.cell_y = 0, 0
-        self.coord_x, self.coord_y = 0, 0
+        self.cell_x, self.cell_y = 0, 1
+        self.coord_x, self.coord_y = 0, cell_size
 
         # Sprites du perso
         self.sprite_up = pygame.image.load(sprite_up).convert_alpha()
