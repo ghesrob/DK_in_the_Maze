@@ -1,9 +1,7 @@
 import pygame
 from pygame.locals import * 
 
-# Fichier local
-from constantes import *
-
+from config import *
 
 class Player:
     """Classe permettant de créer et déplacer un personnage sur un labyrinthe."""
@@ -11,7 +9,7 @@ class Player:
     def __init__(self, maze, sprite_up, sprite_down, sprite_left, sprite_right):
         """ Initialise un personnage.
         Un personnage est caractérisé par sa position à l'écran (en cases et en pixels), son orientation et les 
-        quatres sprites associés à chacune des orientations possibles. Il est de plus associé au labyrinthe de la partie.
+        quatres sprites associés à chacune de ses orientations possibles. Il est de plus associé au labyrinthe de la partie.
         """
         # Position du personnage
         self.cell_x, self.cell_y = maze.start_x, maze.start_y
@@ -23,7 +21,7 @@ class Player:
         self.sprite_right = pygame.image.load(sprite_right).convert_alpha()
         # Orientation du personnage
         self.direction = self.sprite_down
-        # Recuperation du niveau
+        # Labyrinthe de la partie
         self.maze = maze
 
 
