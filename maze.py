@@ -3,23 +3,17 @@ import numpy as np
 import pygame
 from pygame.locals import *
 
-from constantes import *
+from config import *
 
 
 class Maze:
 
     def __init__(self, length_x, length_y):
-        """ Initialise le labyrinthe.
-        Un labyrinthe est caractérisé par sa taille. Ce constructeur choisit aléatoirement une case
-        de départ pour la génération, et initialise un labyrinthe vierge (composé uniquement de murs).
-        """
+        """ Initialise le labyrinthe."""
         self.length_x, self.length_y = length_x, length_y
-        # Cellule initale de l'algorithme de génération
-        self.init_x = random.randrange(1, length_x, 2)
-        self.init_y = random.randrange(1, length_y, 2)
         # Initialisation d'une structure de labyrinthe vierge
-        self.start_x, self.start_y = 0, 1
-        self.end_x, self.end_y = length_x - 1, length_y - 2
+        self.start_x, self.start_y = 0, 0
+        self.end_x, self.end_y = length_x - 1, 0
         self.structure = np.full(fill_value = 'W', shape = (length_y, length_x))
 
 
@@ -39,28 +33,24 @@ class Maze:
             # On récupère les directions valides
             if 0 < end_x < self.length_x and 0 < end_y < self.length_y:
                 if self.structure[end_y, end_x] == 'W':
-                    valid_ways.append((direction, (mid_y, mid_x), (end_y, end_x)))  
+                    valid_ways.append(((mid_y, mid_x), (end_y, end_x)))  
         return(valid_ways)
 
 
     def create(self):
         """Génère le labyrinthe.""" 
-        current_cell = (self.init_y, self.init_x)
+        current_cell = (random.randrange(1, self.length_y, 2), random.randrange(1, self.length_x, 2))
         self.structure[current_cell] = 'P'
-
         cell_stack = [current_cell]
-
         while cell_stack:
             valid_ways = self.find_valid_ways(*current_cell)
-
             if not valid_ways:
                 cell_stack.pop()
                 if cell_stack:
                     current_cell = cell_stack[-1]
                 continue
-
             # Choisit une destination, et s'y déplace
-            direction, mid_cell, end_cell = random.choice(valid_ways)
+            mid_cell, end_cell = random.choice(valid_ways)
             self.structure[mid_cell] = 'P'
             self.structure[end_cell] = 'P'
             current_cell = end_cell
@@ -70,7 +60,6 @@ class Maze:
         valid_start_y = [y for y in range(self.length_y) if self.structure[y, 1] != "W"]
         self.start_y = random.choice(valid_start_y)
         self.structure[self.start_y, self.start_x] = 'S'        
-
         # Sélection de la case d'arrivée
         valid_end_y = [y for y in range(self.length_y) if self.structure[y, -2] != "W"]
         self.end_y = random.choice(valid_end_y)
